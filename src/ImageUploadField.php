@@ -1,7 +1,14 @@
 <?php
 
+namespace Dynamic\ImageUploadField;
+
+use SilverStripe\AssetAdmin\Forms\UploadField;
+use SilverStripe\ORM\SS_List;
+use SilverStripe\Assets\File;
+
 /**
  * Class ImageUploadField
+ * @package Dynamic\ImageUploadField
  */
 class ImageUploadField extends UploadField
 {
@@ -26,7 +33,10 @@ class ImageUploadField extends UploadField
         $this->getValidator()->setAllowedMaxFileSize(min($maxUpload, $maxPost));
 
         // other image specific options
-        $this->setAllowedMaxFileNumber(1);
-        $this->setAllowedFileCategories('image');
+        $this->setIsMultiUpload(false);
+        $allowed = ($this->config()->get('allowed_category'))
+            ? $this->config()->get('allowed_category')
+            : 'image/supported';
+        $this->setAllowedFileCategories($allowed);
     }
 }
